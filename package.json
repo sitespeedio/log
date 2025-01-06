@@ -1,7 +1,7 @@
 {
   "name": "@sitespeed.io/log",
   "description": "The log for sitespeed.io projects",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "devDependencies": {
     "ava": "6.2.0",
