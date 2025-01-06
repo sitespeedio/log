@@ -89,3 +89,45 @@ test('Verbose=3 allows trace logs', t => {
     'Should see trace logs at verbose=3'
   );
 });
+
+test('Setting log level to "error" only logs error (and above)', t => {
+  configureLog({ level: 'error' });
+
+  const logger = getLogger('test-error-level');
+
+  const warnOutput = captureConsole('warn', () => {
+    logger.warn('Should not log at error level');
+  });
+
+  t.false(
+    warnOutput.includes('Should not log at error level'),
+    'Warn messages should not appear at error level'
+  );
+
+  const infoOutput = captureConsole('info', () => {
+    logger.info('Should not log info at error level');
+  });
+
+  t.false(
+    infoOutput.includes('Should not log info at error level'),
+    'Info messages should not appear at error level'
+  );
+
+  const debugOutput = captureConsole('debug', () => {
+    logger.debug('Should not log debug at error level');
+  });
+
+  t.false(
+    debugOutput.includes('Should not log debug at error level'),
+    'Debug messages should not appear at error level'
+  );
+
+  const errorOutput = captureConsole('error', () => {
+    logger.error('We are now at error level');
+  });
+
+  t.true(
+    errorOutput.includes('We are now at error level'),
+    'Error messages should be logged at error level'
+  );
+});

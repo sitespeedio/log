@@ -4,42 +4,47 @@ import { LOG_LEVELS } from './logLevels.js';
 /**
  * Configures the global logger settings.
  * @param {Object} options - Configuration options.
+ * @param {string} [options.level] - Directly set a log level by name (e.g., 'error', 'panic', 'info').
  * @param {number} [options.verbose=0] - Verbosity level (0: INFO, 1: DEBUG, 2: VERBOSE, 3: TRACE).
  * @param {boolean} [options.silent=false] - If true, disables all logging.
  */
 export function configureLog(options = {}) {
-  const { verbose = 0, silent = false } = options;
+  const {
+    level: customLevel,
+    verbose = 0,
+    silent = false
+  } = options;
 
-  // Map the 'verbose' setting to a final level name
-  let level = 'info'; // default is 'info'
+  let finalLevel = 'info';
+
   if (silent) {
-    level = 'none';
-  } else {
+    finalLevel = 'none';
+  }
+
+  else if (customLevel && LOG_LEVELS[customLevel] !== undefined) {
+    finalLevel = customLevel;
+  }
+  else {
     switch (verbose) {
-      case 1: {
-        level = 'debug';
+      case 1:
+        finalLevel = 'debug';
         break;
-      }
-
-      case 2: {
-        level = 'verbose';
+      case 2:
+        finalLevel = 'verbose';
         break;
-      }
-
-      case 3: {
-        level = 'trace';
+      case 3:
+        finalLevel = 'trace';
         break;
-      }
-
-      default: {
-        level = 'info';
-      }
+      default:
+        finalLevel = 'info';
+        break;
     }
   }
 
-  loggerConfig.level = level;
+  loggerConfig.level = finalLevel;
 
-  const numericLevel = LOG_LEVELS[level];
+  // Adjust the format depending on how detailed logs are
+  const numericLevel = LOG_LEVELS[finalLevel];
   loggerConfig.format =
     numericLevel <= LOG_LEVELS.info
       ? '[%(date)s] %(levelname)s: %(message)s'
