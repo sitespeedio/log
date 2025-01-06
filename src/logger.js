@@ -1,0 +1,231 @@
+import { loggerConfig } from './config.js';
+import { LOG_LEVELS } from './logLevels.js';
+
+/**
+ * Configures the global logger settings.
+ * @param {Object} options - Configuration options.
+ * @param {number} [options.verbose=0] - Verbosity level (0: INFO, 1: DEBUG, 2: VERBOSE, 3: TRACE).
+ * @param {boolean} [options.silent=false] - If true, disables all logging.
+ */
+export function configureLog(options = {}) {
+  const { verbose = 0, silent = false } = options;
+
+  // Map the 'verbose' setting to a final level name
+  let level = 'info'; // default is 'info'
+  if (silent) {
+    level = 'none';
+  } else {
+    switch (verbose) {
+      case 1: {
+        level = 'debug';
+        break;
+      }
+
+      case 2: {
+        level = 'verbose';
+        break;
+      }
+
+      case 3: {
+        level = 'trace';
+        break;
+      }
+
+      default: {
+        level = 'info';
+      }
+    }
+  }
+
+  loggerConfig.level = level;
+
+  const numericLevel = LOG_LEVELS[level];
+  loggerConfig.format =
+    numericLevel <= LOG_LEVELS.info
+      ? '[%(date)s] %(levelname)s: %(message)s'
+      : '[%(date)s] %(levelname)s: [%(name)s] %(message)s';
+}
+
+const COLORS = {
+  red: '\u001B[31m',
+  reset: '\u001B[0m',
+};
+
+const CONSOLE_METHOD_MAP = {
+  none: 'log',
+  critical: 'error',
+  error: 'error',
+  warn: 'warn',
+  info: 'info',
+  debug: 'debug',
+  verbose: 'log',
+  trace: 'trace',
+};
+
+
+const COLOR_MAP = {
+  critical: COLORS.red,
+  error: COLORS.red,
+};
+
+function pad(value) {
+  return String(value).padStart(2, '0');
+}
+
+
+function getTimestamp() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = pad(now.getMonth() + 1);
+  const day = pad(now.getDate());
+  const hours = pad(now.getHours());
+  const minutes = pad(now.getMinutes());
+  const seconds = pad(now.getSeconds());
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+function formatPlaceholders(message, args) {
+  let formatted = message;
+  let argIndex = 0;
+
+  // Regular expression to find all placeholders
+  const placeholderRegex = /%[sdjO?]/g;
+  formatted = formatted.replaceAll(placeholderRegex, (match) => {
+    if (argIndex >= args.length) {
+      // No corresponding argument left
+      return match; 
+    }
+    const arg = args[argIndex++];
+    switch (match) {
+      case '%s': return String(arg);
+      case '%d': return Number(arg);
+      case '%j': {
+        try {
+          return JSON.stringify(arg, undefined, 2);
+        } catch {
+          return '[Circular JSON]';
+        }
+      }
+      case '%O': {
+        if (arg instanceof Error) {
+          const errorObj = {
+            name: arg.name,
+            message: arg.message,
+            stack: arg.stack,
+          };
+          return JSON.stringify(errorObj, undefined, 2);
+        }
+        try {
+          return JSON.stringify(arg, undefined, 2);
+        } catch {
+          return '[Circular JSON]';
+        }
+      }
+      case '%?': {
+        if (arg instanceof Error) {
+          return `Error: ${arg.message}\n${arg.stack}`;
+        } else if (typeof arg === 'object') {
+          try {
+            return JSON.stringify(arg, undefined, 2);
+          } catch {
+            return '[Circular JSON]';
+          }
+        } else {
+          return String(arg);
+        }
+      }
+      default:
+        return match;
+    }
+  });
+
+  if (argIndex < args.length) {
+    const leftover = args.slice(argIndex);
+    for (const leftoverArg of leftover) {
+      if (leftoverArg instanceof Error) {
+        formatted += ` Error: ${leftoverArg.message}\n${leftoverArg.stack}`;
+      } else if (typeof leftoverArg === 'object') {
+        try {
+          formatted += ` ${JSON.stringify(leftoverArg, undefined, 2)}`;
+        } catch {
+          formatted += ' [Circular JSON]';
+        }
+      } else {
+        formatted += ` ${String(leftoverArg)}`;
+      }
+    }
+  }
+
+  return formatted;
+}
+
+export class Logger {
+
+  constructor(name = '') {
+    this.name = name;
+  }
+
+  isEnabledFor(levelName) {
+    const currentLevel = loggerConfig.level.toLowerCase();
+    return LOG_LEVELS[levelName] <= LOG_LEVELS[currentLevel];
+  }
+
+
+  log(level, message, ...args) {
+    const currentLevel = loggerConfig.level.toLowerCase();
+    if (LOG_LEVELS[level] > LOG_LEVELS[currentLevel]) {
+      return;
+    }
+
+    const timestamp = getTimestamp();
+    const upperLevel = level.toUpperCase();
+
+    let formattedMessage = formatPlaceholders(message, args);
+
+    const finalOutput = loggerConfig.format
+      .replace('%(date)s', timestamp)
+      .replace('%(levelname)s', upperLevel)
+      .replace('%(name)s', this.name)
+      .replace('%(message)s', formattedMessage);
+
+      const consoleMethod = CONSOLE_METHOD_MAP[level] ?? 'log';
+      const colorPrefix = COLOR_MAP[level] ?? '';
+      const colorSuffix = colorPrefix ? COLORS.reset : '';
+      const coloredOutput = `${colorPrefix}${finalOutput}${colorSuffix}`;
+
+      console[consoleMethod](coloredOutput);
+
+  }
+
+  critical(message, ...args) {
+    this.log('critical', message, ...args);
+  }
+
+  error(message, ...args) {
+    this.log('error', message, ...args);
+  }
+
+  warn(message, ...args) {
+    this.log('warn', message, ...args);
+  }
+
+  info(message, ...args) {
+    this.log('info', message, ...args);
+  }
+
+  debug(message, ...args) {
+    this.log('debug', message, ...args);
+  }
+
+  verbose(message, ...args) {
+    this.log('verbose', message, ...args);
+  }
+
+  trace(message, ...args) {
+    this.log('trace', message, ...args);
+  }
+}
+
+export function getLogger(name) {
+  return new Logger(name);
+}
