@@ -131,3 +131,71 @@ test('Setting log level to "error" only logs error (and above)', t => {
     'Error messages should be logged at error level'
   );
 });
+
+test('Test all log levels', t => {
+  configureLog({ level: 'trace' });
+  const logger = getLogger('test-all-levels');
+
+  const traceOutput = captureConsole('trace', () => {
+    logger.trace('Should log at trace level');
+  });
+
+  const debugOutput = captureConsole('debug', () => {
+    logger.debug('Should log at debug level');
+  });
+
+  const verboseOutput = captureConsole('verbose', () => {
+    logger.verbose('Should log at verbose level');
+  });
+
+  const infoOutput = captureConsole('info', () => {
+    logger.info('Should log at info level');
+  });
+
+  const warningOutput = captureConsole('warning', () => {
+    logger.warning('Should log at warning level');
+  });
+
+  const errorOutput = captureConsole('error', () => {
+    logger.error('Should log at error level');
+  });
+
+  const criticalOutput = captureConsole('critical', () => {
+    logger.critical('Should log at critical level');
+  });
+
+  t.true(
+    traceOutput.includes('Should log at trace level'),
+    'Trace messages should be logged at trace level'
+  );
+
+  t.true(
+    debugOutput.includes('Should log at debug level'),
+    'Debug messages should be logged at trace level'
+  );
+
+  t.true(
+    verboseOutput.includes('Should log at verbose level'),
+    'Verbose messages should be logged at trace level'
+  );
+
+  t.true(
+    infoOutput.includes('Should log at info level'),
+    'Info messages should be logged at trace level'
+  );
+
+  t.true(
+    warningOutput.includes('Should log at warning level'),
+    'Warning messages should be logged at trace level'
+  );
+
+  t.true(
+    errorOutput.includes('Should log at error level'),
+    'Error messages should be logged at trace level'
+  );
+
+  t.true(
+    criticalOutput.includes('Should log at critical level'),
+    'Critical messages should be logged at trace level'
+  );
+});
