@@ -57,7 +57,7 @@ const CONSOLE_METHOD_MAP = {
   none: 'log',
   critical: 'error',
   error: 'error',
-  warning: 'warn', 
+  warning: 'warn',
   info: 'info',
   debug: 'debug',
   verbose: 'log',
