@@ -1,5 +1,9 @@
 # sitespeed.io log changelog (we do [semantic versioning](https://semver.org))
 
+## 0.2.1 - 2025-01-07
+### Fixed
+* Fixed log levels.
+
 ## 0.2.0 - 2025-01-07
 ### Added
 * Add warning method.
