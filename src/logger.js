@@ -55,12 +55,12 @@ const COLORS = {
 
 const CONSOLE_METHOD_MAP = {
   none: 'log',
-  critical: 'error',
+  critical: 'critical',
   error: 'error',
   warning: 'warning',
   info: 'info',
   debug: 'debug',
-  verbose: 'log',
+  verbose: 'verbose',
   trace: 'trace'
 };
 
