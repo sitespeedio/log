@@ -144,7 +144,7 @@ test('Test all log levels', t => {
     logger.debug('Should log at debug level');
   });
 
-  const verboseOutput = captureConsole('verbose', () => {
+  const verboseOutput = captureConsole('log', () => {
     logger.verbose('Should log at verbose level');
   });
 
@@ -152,7 +152,7 @@ test('Test all log levels', t => {
     logger.info('Should log at info level');
   });
 
-  const warningOutput = captureConsole('warning', () => {
+  const warningOutput = captureConsole('warn', () => {
     logger.warning('Should log at warning level');
   });
 
@@ -160,7 +160,7 @@ test('Test all log levels', t => {
     logger.error('Should log at error level');
   });
 
-  const criticalOutput = captureConsole('critical', () => {
+  const criticalOutput = captureConsole('error', () => {
     logger.critical('Should log at critical level');
   });
 
