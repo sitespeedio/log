@@ -95,7 +95,7 @@ test('Setting log level to "error" only logs error (and above)', t => {
 
   const logger = getLogger('test-error-level');
 
-  const warningOutput = captureConsole('warn', () => {
+  const warningOutput = captureConsole('warning', () => {
     logger.warning('Should not log at error level');
   });
 
