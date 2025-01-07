@@ -9,35 +9,32 @@ import { LOG_LEVELS } from './logLevels.js';
  * @param {boolean} [options.silent=false] - If true, disables all logging.
  */
 export function configureLog(options = {}) {
-  const {
-    level: customLevel,
-    verbose = 0,
-    silent = false
-  } = options;
+  const { level: customLevel, verbose = 0, silent = false } = options;
 
   let finalLevel = 'info';
 
   if (silent) {
     finalLevel = 'none';
-  }
-
-  else if (customLevel && LOG_LEVELS[customLevel] !== undefined) {
+  } else if (customLevel && LOG_LEVELS[customLevel] !== undefined) {
     finalLevel = customLevel;
-  }
-  else {
+  } else {
     switch (verbose) {
-      case 1:
+      case 1: {
         finalLevel = 'debug';
         break;
-      case 2:
+      }
+      case 2: {
         finalLevel = 'verbose';
         break;
-      case 3:
+      }
+      case 3: {
         finalLevel = 'trace';
         break;
-      default:
+      }
+      default: {
         finalLevel = 'info';
         break;
+      }
     }
   }
 
@@ -53,7 +50,7 @@ export function configureLog(options = {}) {
 
 const COLORS = {
   red: '\u001B[31m',
-  reset: '\u001B[0m',
+  reset: '\u001B[0m'
 };
 
 const CONSOLE_METHOD_MAP = {
@@ -64,19 +61,17 @@ const CONSOLE_METHOD_MAP = {
   info: 'info',
   debug: 'debug',
   verbose: 'log',
-  trace: 'trace',
+  trace: 'trace'
 };
-
 
 const COLOR_MAP = {
   critical: COLORS.red,
-  error: COLORS.red,
+  error: COLORS.red
 };
 
 function pad(value) {
   return String(value).padStart(2, '0');
 }
-
 
 function getTimestamp() {
   const now = new Date();
@@ -95,15 +90,19 @@ function formatPlaceholders(message, args) {
 
   // Regular expression to find all placeholders
   const placeholderRegex = /%[sdjO?]/g;
-  formatted = formatted.replaceAll(placeholderRegex, (match) => {
+  formatted = formatted.replaceAll(placeholderRegex, match => {
     if (argIndex >= args.length) {
       // No corresponding argument left
-      return match; 
+      return match;
     }
     const arg = args[argIndex++];
     switch (match) {
-      case '%s': return String(arg);
-      case '%d': return Number(arg);
+      case '%s': {
+        return String(arg);
+      }
+      case '%d': {
+        return Number(arg);
+      }
       case '%j': {
         try {
           return JSON.stringify(arg, undefined, 2);
@@ -116,7 +115,7 @@ function formatPlaceholders(message, args) {
           const errorObj = {
             name: arg.name,
             message: arg.message,
-            stack: arg.stack,
+            stack: arg.stack
           };
           return JSON.stringify(errorObj, undefined, 2);
         }
@@ -139,8 +138,9 @@ function formatPlaceholders(message, args) {
           return String(arg);
         }
       }
-      default:
+      default: {
         return match;
+      }
     }
   });
 
@@ -165,7 +165,6 @@ function formatPlaceholders(message, args) {
 }
 
 export class Logger {
-
   constructor(name = '') {
     this.name = name;
   }
@@ -174,7 +173,6 @@ export class Logger {
     const currentLevel = loggerConfig.level.toLowerCase();
     return LOG_LEVELS[levelName] <= LOG_LEVELS[currentLevel];
   }
-
 
   log(level, message, ...args) {
     const currentLevel = loggerConfig.level.toLowerCase();
@@ -193,13 +191,12 @@ export class Logger {
       .replace('%(name)s', this.name)
       .replace('%(message)s', formattedMessage);
 
-      const consoleMethod = CONSOLE_METHOD_MAP[level] ?? 'log';
-      const colorPrefix = COLOR_MAP[level] ?? '';
-      const colorSuffix = colorPrefix ? COLORS.reset : '';
-      const coloredOutput = `${colorPrefix}${finalOutput}${colorSuffix}`;
+    const consoleMethod = CONSOLE_METHOD_MAP[level] ?? 'log';
+    const colorPrefix = COLOR_MAP[level] ?? '';
+    const colorSuffix = colorPrefix ? COLORS.reset : '';
+    const coloredOutput = `${colorPrefix}${finalOutput}${colorSuffix}`;
 
-      console[consoleMethod](coloredOutput);
-
+    console[consoleMethod](coloredOutput);
   }
 
   critical(message, ...args) {
