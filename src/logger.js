@@ -57,7 +57,7 @@ const CONSOLE_METHOD_MAP = {
   none: 'log',
   critical: 'error',
   error: 'error',
-  warn: 'warn',
+  warning: 'warning',
   info: 'info',
   debug: 'debug',
   verbose: 'log',
@@ -207,8 +207,8 @@ export class Logger {
     this.log('error', message, ...args);
   }
 
-  warn(message, ...args) {
-    this.log('warn', message, ...args);
+  warning(message, ...args) {
+    this.log('warning', message, ...args);
   }
 
   info(message, ...args) {

@@ -43,7 +43,7 @@ test('Silent mode should log nothing', t => {
 
   const logger = getLogger('test-silent');
 
-  const allMethods = ['log', 'info', 'debug', 'warn', 'error', 'trace'];
+  const allMethods = ['log', 'info', 'debug', 'warning', 'error', 'trace'];
   let capturedAnything = false;
 
   for (const m of allMethods) {
@@ -95,13 +95,13 @@ test('Setting log level to "error" only logs error (and above)', t => {
 
   const logger = getLogger('test-error-level');
 
-  const warnOutput = captureConsole('warn', () => {
-    logger.warn('Should not log at error level');
+  const warningOutput = captureConsole('warn', () => {
+    logger.warning('Should not log at error level');
   });
 
   t.false(
-    warnOutput.includes('Should not log at error level'),
-    'Warn messages should not appear at error level'
+    warningOutput.includes('Should not log at error level'),
+    'Warning messages should not appear at error level'
   );
 
   const infoOutput = captureConsole('info', () => {
