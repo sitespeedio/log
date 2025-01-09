@@ -85,6 +85,11 @@ function getTimestamp() {
 }
 
 function formatPlaceholders(message, args) {
+  // it's not a string
+  if (!message.replaceAll) {
+    return message;
+  }
+
   let formatted = message;
   let argIndex = 0;
 
