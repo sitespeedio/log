@@ -180,28 +180,33 @@ export class Logger {
   }
 
   log(level, message, ...args) {
-    const currentLevel = loggerConfig.level.toLowerCase();
-    if (LOG_LEVELS[level] > LOG_LEVELS[currentLevel]) {
-      return;
+    try {
+      const currentLevel = loggerConfig.level.toLowerCase();
+      if (LOG_LEVELS[level] > LOG_LEVELS[currentLevel]) {
+        return;
+      }
+
+      const timestamp = getTimestamp();
+      const upperLevel = level.toUpperCase();
+
+      let formattedMessage = formatPlaceholders(message, args);
+
+      const finalOutput = loggerConfig.format
+        .replace('%(date)s', timestamp)
+        .replace('%(levelname)s', upperLevel)
+        .replace('%(name)s', this.name)
+        .replace('%(message)s', formattedMessage);
+
+      const consoleMethod = CONSOLE_METHOD_MAP[level] ?? 'log';
+      const colorPrefix = COLOR_MAP[level] ?? '';
+      const colorSuffix = colorPrefix ? COLORS.reset : '';
+      const coloredOutput = `${colorPrefix}${finalOutput}${colorSuffix}`;
+
+      console[consoleMethod](coloredOutput);
+    } catch (error) {
+      console.error('Could create the log message');
+      console.error(`${message} with the error ${error}`);
     }
-
-    const timestamp = getTimestamp();
-    const upperLevel = level.toUpperCase();
-
-    let formattedMessage = formatPlaceholders(message, args);
-
-    const finalOutput = loggerConfig.format
-      .replace('%(date)s', timestamp)
-      .replace('%(levelname)s', upperLevel)
-      .replace('%(name)s', this.name)
-      .replace('%(message)s', formattedMessage);
-
-    const consoleMethod = CONSOLE_METHOD_MAP[level] ?? 'log';
-    const colorPrefix = COLOR_MAP[level] ?? '';
-    const colorSuffix = colorPrefix ? COLORS.reset : '';
-    const coloredOutput = `${colorPrefix}${finalOutput}${colorSuffix}`;
-
-    console[consoleMethod](coloredOutput);
   }
 
   critical(message, ...args) {
