@@ -1,5 +1,9 @@
 # sitespeed.io log changelog (we do [semantic versioning](https://semver.org))
 
+## 0.2.3 - 2025-01-10
+### Fixed
+* Better safe than sorry: try/catch when logging.
+
 ## 0.2.2 - 2025-01-07
 ### Fixed
 * Fixed another mapping log level problem.
