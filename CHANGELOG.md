@@ -1,6 +1,6 @@
 # sitespeed.io log changelog (we do [semantic versioning](https://semver.org))
 
-## 0.2.3 - 2025-01-10
+## 0.2.4 - 2025-01-10
 ### Fixed
 * Better safe than sorry: try/catch when logging.
 
