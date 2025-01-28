@@ -15,11 +15,11 @@
     "node": ">=20.0.0"
   },
   "files": [
-    "src/**/*"
+    "src/*"
   ],
   "exports": {
     ".": {
-      "import": "./src/logger.js"
+      "import": "./src/index.js"
     }
   },
   "scripts": {
