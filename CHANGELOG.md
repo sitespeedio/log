@@ -1,5 +1,9 @@
 # sitespeed.io log changelog (we do [semantic versioning](https://semver.org))
 
+## 0.2.5 - 2025-01-28
+### Fixed
+* Fix so both .warn and .warning works [#3](https://github.com/sitespeedio/log/pull/3).
+
 ## 0.2.4 - 2025-01-10
 ### Fixed
 * Better safe than sorry: try/catch when logging.
