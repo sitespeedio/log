@@ -221,6 +221,10 @@ export class Logger {
     this.log('warning', message, ...args);
   }
 
+  warn(message, ...args) {
+    this.log('warning', message, ...args);
+  }
+
   info(message, ...args) {
     this.log('info', message, ...args);
   }

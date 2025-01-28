@@ -156,6 +156,10 @@ test('Test all log levels', t => {
     logger.warning('Should log at warning level');
   });
 
+  const warnOutput = captureConsole('warn', () => {
+    logger.warn('Should log at warning level');
+  });
+
   const errorOutput = captureConsole('error', () => {
     logger.error('Should log at error level');
   });
@@ -181,21 +185,26 @@ test('Test all log levels', t => {
 
   t.true(
     infoOutput.includes('Should log at info level'),
-    'Info messages should be logged at trace level'
+    'Info messages should be logged at info level'
   );
 
   t.true(
     warningOutput.includes('Should log at warning level'),
+    'Warning messages should be logged at warning level'
+  );
+
+  t.true(
+    warnOutput.includes('Should log at warning level'),
     'Warning messages should be logged at trace level'
   );
 
   t.true(
     errorOutput.includes('Should log at error level'),
-    'Error messages should be logged at trace level'
+    'Error messages should be logged at error level'
   );
 
   t.true(
     criticalOutput.includes('Should log at critical level'),
-    'Critical messages should be logged at trace level'
+    'Critical messages should be logged at critical level'
   );
 });
