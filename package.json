@@ -4,12 +4,12 @@
   "version": "0.2.6",
   "type": "module",
   "devDependencies": {
-    "ava": "6.2.0",
-    "eslint": "9.17.0",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-prettier": "5.2.1",
+    "ava": "6.4.1",
+    "eslint": "9.37.0",
+    "eslint-config-prettier": "9.1.2",
+    "eslint-plugin-prettier": "5.5.4",
     "eslint-plugin-unicorn": "56.0.1",
-    "prettier": "3.4.2"
+    "prettier": "3.6.2"
   },
   "engines": {
     "node": ">=20.0.0"
