@@ -1,5 +1,12 @@
 # sitespeed.io log changelog (we do [semantic versioning](https://semver.org))
 
+## 1.0.0 - 2025-10-16
+### Breaking
+* Removed color coding [#5](https://github.com/sitespeedio/log/pull/5). Errors will now have default output color instead of red.
+
+### Fixed
+* Update dependencies [#4](https://github.com/sitespeedio/log/pull/4).
+
 ## 0.2.6 - 2025-01-28
 ### Fixed
 * 0.2.5 release was broken.
