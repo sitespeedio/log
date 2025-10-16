@@ -48,11 +48,6 @@ export function configureLog(options = {}) {
       : '[%(date)s] %(levelname)s: [%(name)s] %(message)s';
 }
 
-const COLORS = {
-  red: '\u001B[31m',
-  reset: '\u001B[0m'
-};
-
 const CONSOLE_METHOD_MAP = {
   none: 'log',
   critical: 'error',
@@ -62,11 +57,6 @@ const CONSOLE_METHOD_MAP = {
   debug: 'debug',
   verbose: 'log',
   trace: 'trace'
-};
-
-const COLOR_MAP = {
-  critical: COLORS.red,
-  error: COLORS.red
 };
 
 function pad(value) {
@@ -198,11 +188,8 @@ export class Logger {
         .replace('%(message)s', formattedMessage);
 
       const consoleMethod = CONSOLE_METHOD_MAP[level] ?? 'log';
-      const colorPrefix = COLOR_MAP[level] ?? '';
-      const colorSuffix = colorPrefix ? COLORS.reset : '';
-      const coloredOutput = `${colorPrefix}${finalOutput}${colorSuffix}`;
+      console[consoleMethod](finalOutput);
 
-      console[consoleMethod](coloredOutput);
     } catch (error) {
       console.error('Could create the log message');
       console.error(`${message} with the error ${error}`);
