@@ -1,39 +1,24 @@
+import js from '@eslint/js';
 import prettier from 'eslint-plugin-prettier';
+import prettierConfig from 'eslint-config-prettier';
 import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all
-});
 
 export default [
-  {
-    ignores: []
-  },
-  ...compat.extends('eslint:recommended', 'plugin:unicorn/recommended'),
+  js.configs.recommended,
+  unicorn.configs.recommended,
+  prettierConfig,
   {
     plugins: {
-      prettier,
-      unicorn
+      prettier
     },
-
     languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
       globals: {
         ...globals.node
-      },
-
-      ecmaVersion: 'latest',
-      sourceType: 'module'
+      }
     },
-
     rules: {
       'prettier/prettier': [
         'error',
@@ -44,7 +29,6 @@ export default [
           embeddedLanguageFormatting: 'off'
         }
       ],
-
       'require-atomic-updates': 0,
       'no-extra-semi': 0,
       'no-mixed-spaces-and-tabs': 0,
