@@ -96,7 +96,7 @@ function formatPlaceholders(message, args) {
         return String(arg);
       }
       case '%d': {
-        return Number(arg);
+        return String(Number(arg));
       }
       case '%j': {
         try {
@@ -182,16 +182,16 @@ export class Logger {
       let formattedMessage = formatPlaceholders(message, args);
 
       const finalOutput = loggerConfig.format
-        .replace('%(date)s', timestamp)
-        .replace('%(levelname)s', upperLevel)
-        .replace('%(name)s', this.name)
-        .replace('%(message)s', formattedMessage);
+        .replace('%(date)s', () => timestamp)
+        .replace('%(levelname)s', () => upperLevel)
+        .replace('%(name)s', () => this.name)
+        .replace('%(message)s', () => formattedMessage);
 
       const consoleMethod = CONSOLE_METHOD_MAP[level] ?? 'log';
       console[consoleMethod](finalOutput);
 
     } catch (error) {
-      console.error('Could create the log message');
+      console.error('Could not create the log message');
       console.error(`${message} with the error ${error}`);
     }
   }
