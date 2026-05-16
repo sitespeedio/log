@@ -1,5 +1,17 @@
 # sitespeed.io log changelog (we do [semantic versioning](https://semver.org))
 
+## 2.0.0 - 2026-05-16
+### Breaking
+* Require Node.js 22 or later [#9](https://github.com/sitespeedio/log/pull/9). Dropped Node 20.
+
+### Fixed
+* Log messages containing `$1`, `$&`, `$$` and similar tokens are now emitted verbatim instead of being mangled as regex backreferences [#8](https://github.com/sitespeedio/log/pull/8).
+* `%d` placeholder now consistently returns a string.
+* Corrected a "Could create the log message" fallback message that was missing the word "not".
+* Pinned GitHub Action versions to SHAs [#7](https://github.com/sitespeedio/log/pull/7).
+* Refreshed dev tooling (ava, eslint, prettier and plugins) and migrated to native eslint flat config [#10](https://github.com/sitespeedio/log/pull/10).
+* Rewrote the README with install, usage, log levels, configuration and placeholder reference [#10](https://github.com/sitespeedio/log/pull/10).
+
 ## 1.0.0 - 2025-10-16
 ### Breaking
 * Removed color coding [#5](https://github.com/sitespeedio/log/pull/5). Errors will now have default output color instead of red.
