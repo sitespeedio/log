@@ -11,7 +11,7 @@ import { LOG_LEVELS } from './logLevels.js';
 export function configureLog(options = {}) {
   const { level: customLevel, verbose = 0, silent = false } = options;
 
-  let finalLevel = 'info';
+  let finalLevel;
 
   if (silent) {
     finalLevel = 'none';
@@ -189,7 +189,6 @@ export class Logger {
 
       const consoleMethod = CONSOLE_METHOD_MAP[level] ?? 'log';
       console[consoleMethod](finalOutput);
-
     } catch (error) {
       console.error('Could not create the log message');
       console.error(`${message} with the error ${error}`);
