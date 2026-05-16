@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-np $* --no-yarn --branch main
+np $* --branch main
